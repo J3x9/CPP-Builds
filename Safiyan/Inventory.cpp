@@ -467,9 +467,10 @@ void Supplier_Purchasing_Products()
     cin >> choice;
     int Num_To_Buy;
     int itemNumber;
-    int index;
+    int index = itemNumber - 1;
     bool iteminCart = false;
     int num = 0;
+    int found;
 
     switch (choice) 
     {
@@ -486,15 +487,8 @@ void Supplier_Purchasing_Products()
             }
 
             index = itemNumber - 1;
-            int found;
 //-----------------------------------------------------------------------------------------
-        // for(auto i = customer[current_user].second.begin(); i!= customer[current_user].second.end(); i++)
-        // {
-        //     if(customer[current_user].second[num].Supplier_item_Name == "test")
-        //     {
-                
-        //     }
-        // }
+        
 //-----------------------------------------------------------------------------------------
         if (product[index].item_Quantity >= Num_To_Buy)
         {
@@ -532,42 +526,69 @@ void Supplier_Purchasing_Products()
         {
             cout << "\n\nNOT ENOUGH QUANTITY AVAILABLE!!\n" << endl;
         }
-        break;            
-//-----------------------------------------------------------------------------------------
-        case '2': 
+        break;
+
+        case '2':
+
             Num_To_Buy = 5;
             cout << "ENTER THE NUMBER OF ITEM TO BE BOUGHT : ";
             cin >> itemNumber;
-
-            if (product[index].item_Quantity >= Num_To_Buy) {
-            supplier_products tmp;
-            tmp.Supplier_item_Name = product[index].item_Name;
-            tmp.Supplier_item_Quantity = Num_To_Buy;
-            tmp.Supplier_item_Price = product[index].item_Price * Num_To_Buy;
-
-            product[index].item_Quantity -= Num_To_Buy;
-
-            auto it = Supplier_cart.find(product[index].item_Name);
-            
-            if (it != Supplier_cart.end())
+            if (itemNumber < 1 || itemNumber > product.size()) 
             {
-                it->second.Supplier_item_Quantity += Num_To_Buy;
-                it->second.Supplier_item_Price += product[index].item_Price * Num_To_Buy;
-            } 
-            else
-            {
-                Supplier_cart[product[index].item_Name] = tmp;
+                cout << "INVALID ITEM NUMBER !! \n\n" << endl;
+                system("pause");
+                Supplier_Purchasing_Products();
+                return;
             }
 
+            index = itemNumber - 1;
+            found = 0;
+//-----------------------------------------------------------------------------------------
+        
+//-----------------------------------------------------------------------------------------
+        if (product[index].item_Quantity >= Num_To_Buy)
+        {
+            num = 0;
+            for(auto i = customer[current_user].second.begin(); i!= customer[current_user].second.end(); i++)
+            {
+                if(customer[current_user].second[num].Supplier_item_Name == product[index].item_Name)
+                {
+                    found = num;
+                    iteminCart = true;
+                    break;
+                }
+                num++;
+            }
+            if(iteminCart)
+            {
+                customer[current_user].second[found].Supplier_item_Quantity += Num_To_Buy;
+                customer[current_user].second[found].Supplier_item_Price += product[index].item_Price * Num_To_Buy;
+                product[index].item_Quantity -= Num_To_Buy;
+            }
+            else
+            {
+                supplier_products tmp;
+                tmp.Supplier_item_Name = product[index].item_Name;
+                tmp.Supplier_item_Quantity = Num_To_Buy;
+                tmp.Supplier_item_Price = product[index].item_Price * Num_To_Buy;
+
+                product[index].item_Quantity -= Num_To_Buy;
+                customer[current_user].second.push_back(tmp);
+            }
+//-----------------------------------------------------------------------------------------
             cout << "\n\nPURCHASE SUCCESSFUL!!\n" << endl;
-        } else {
+        } 
+        else
+        {
             cout << "\n\nNOT ENOUGH QUANTITY AVAILABLE!!\n" << endl;
         }
-            break;
+        break;
+
         case 'E':
         case 'e':
             Supplier_Choice();
-            break;
+        break;
+
         default:
             cout << "Invalid choice!" << endl;
     }
@@ -733,7 +754,7 @@ void execute()
 //     MAIN FUNCTION
 //-------------------------
 int main()
-{   int indexNumber;
+{
     inventory s1;
     s1.execute();
 return 0;
