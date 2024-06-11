@@ -465,12 +465,13 @@ void Supplier_Purchasing_Products()
     cout << "PRESS E/e TO RETURN TO TH STOCK INTERFACE \n\n" << endl;
     cout << "ENTER YOUR CHOICE : ";
     cin >> choice;
-    int Num_To_Buy;
-    int itemNumber;
-    int index = itemNumber - 1;
-    bool iteminCart = false;
-    int num = 0;
-    int found;
+
+    int Num_To_Buy;                 //Quantity of item User wants to buy
+    int itemNumber;                 //User choice from console for item number
+    int index = itemNumber - 1;     //Item Index in map/vector
+    bool iteminCart = false;        //Found item in cart
+    int num = 0;                    //Index of product vector in map
+    int found;                      //Index of the found item in cart
 
     switch (choice) 
     {
